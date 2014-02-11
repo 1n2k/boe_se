@@ -4,4 +4,4 @@
 *.dll
 *.a
 *.so
-./boe_se/bin
+./boe_se/bin/*
