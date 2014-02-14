@@ -122,13 +122,26 @@ namespace boe_se
 				return this.DataId;
 			}
 
-			private Tuple<DateTime,int,int>[] priceList;
-			public Tuple<DateTime,int,int>[] PriceList {
+			/// <summary>
+			/// Get most recent sell and buy data.
+			/// </summary>
+			public void Refresh(){
+
+			}
+
+			private List<Tuple<DateTime,int,int>> sellList;
+			public List<Tuple<DateTime,int,int>> SellList {
 				get {
 
 				}
 			}
+			
+			private List<Tuple<DateTime,int,int>> buyList;
+			public List<Tuple<DateTime,int,int>> BuyList {
+				get {
 
+				}
+			}
 		}
 	}
 }
