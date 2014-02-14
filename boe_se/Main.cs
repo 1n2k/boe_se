@@ -6,7 +6,8 @@ namespace boe_se
 	{
 		public static void Main (string[] args)
 		{
-			Item i = new Item(3443);
+			new Engine.Item(3443).ToString();
+
 			Console.WriteLine ("Hello World!");
 		}
 	}
