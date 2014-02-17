@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Net;
 using System.Diagnostics;
 using System.Runtime.Serialization.Json;
+using System.Xml;
 
 namespace boe_se
 {
@@ -26,63 +27,27 @@ namespace boe_se
 
 			public DateTime PriceLastChanged { get; private set; }
 
-			private void ParseInfo (string resultString)
+			public Item ( XmlDictionaryReader jsonInfo )
 			{
-				Console.WriteLine (resultString);
-				var splitData = resultString.Trim (new [] {'{','}'}).Split (',');
-				foreach (var item in splitData) {
-					var splItem = item.Split (':');
-					switch (splItem [0].Trim ('\"')) {
-					case "data_id":
-						DataId = Convert.ToInt32 (splItem [1]);
-						break;
-					case "name":
-						Name = splItem [1].Trim ('\"');
-						break;
-					case "rarity":
-						Rarity = Convert.ToInt32 (splItem [1]);
-						break;
-					case "restriction_level":
-						RestrictionLevel = Convert.ToInt32 (splItem [1]);
-						break;
-					case "img":
-						ImageURL = splItem [1].Trim ('\"');
-						break;
-					case "type_id":
-						TypeId = Convert.ToInt32 (splItem [1]);
-						break;
-					case "sub_type_id":
-						SubTypeId = Convert.ToInt32 (splItem [1]);
-						break;
-					case "price_last_changed":
-						PriceLastChanged = DateTime.Parse ((splItem [1].Trim ('\"')).Split (' ') [0]);
-						break;
-					}
-				}
-				return;
-			}
-
-			/// <summary>
-			/// Initializes a new instance of the <see cref="boe_se.Item"/> class.
-			/// </summary>
-			/// <param name='dataId'>
-			/// Data identifier.
-			/// </param>
-			public Item (int dataId)
-			{
-				WebClient wc = new WebClient ();
-				ParseInfo (wc.DownloadString ("http://www.gw2spidy.com/api/v0.9/json/item/" + dataId)
-			          .Replace ("\n", "")
-			          .Replace ("\t", "")
-			          .Replace ("\r", "")
-			          .Replace ("{\"result\":", "")
-			          .TrimEnd ('}') + "}"
-				);
-			}
-
-			public Item (string name)
-			{
-
+                while (jsonInfo.Read())
+                {
+                    Console.WriteLine(jsonInfo.Name + ": " + jsonInfo.Value);
+                }
+                try
+                {
+                    DataId = Convert.ToInt32( jsonInfo["data_id"] );
+                    Name = jsonInfo["name"];
+                    Rarity = Convert.ToInt32( jsonInfo["rarity"] );
+                    RestrictionLevel = Convert.ToInt32( jsonInfo["restriction_level"] );
+                    ImageURL = jsonInfo["img"];
+                    TypeId = Convert.ToInt32( jsonInfo["type_id"] );
+                    SubTypeId = Convert.ToInt32( jsonInfo["sub_type_id"] );
+                    PriceLastChanged = Convert.ToDateTime( jsonInfo["price_last_changed"] );
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e.ToString());
+                }
 			}
 
 			/// <summary>
@@ -132,14 +97,14 @@ namespace boe_se
 			private List<Tuple<DateTime,int,int>> sellList;
 			public List<Tuple<DateTime,int,int>> SellList {
 				get {
-
+                    return null;
 				}
 			}
 			
 			private List<Tuple<DateTime,int,int>> buyList;
 			public List<Tuple<DateTime,int,int>> BuyList {
 				get {
-
+                    return null;
 				}
 			}
 		}

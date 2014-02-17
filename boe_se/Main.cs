@@ -1,4 +1,5 @@
 using System;
+using boe_se.Engine;
 
 namespace boe_se
 {
@@ -6,9 +7,10 @@ namespace boe_se
 	{
 		public static void Main (string[] args)
 		{
-			new Engine.Item(3443).ToString();
+            Item a = Market.getInstance.getItem(443);
 
-			Console.WriteLine ("Hello World!");
+			Console.WriteLine ("Hello World! " + a.Name + ", last changed: " + a.PriceLastChanged);
+            Console.ReadLine();
 		}
 	}
 }
