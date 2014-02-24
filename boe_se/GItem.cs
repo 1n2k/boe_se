@@ -11,6 +11,24 @@ namespace boe_se
 {
 	namespace Engine
     {
+        public class GListing
+        {
+
+
+            [JsonProperty("listing_datetime")]
+            private string listingDatetime
+            {
+                get;
+                set;
+            }
+            public DateTime ListingDatetime {
+                get
+                {
+                    return Convert.ToDateTime(listingDatetime.TrimEnd(new[] { ' ', 'U', 'T', 'C' }));
+                }
+            }
+        }
+
 		public class GItem
 		{
             [JsonProperty("name")]
@@ -46,29 +64,6 @@ namespace boe_se
                     return Convert.ToDateTime(priceLastChanged.TrimEnd(new [] {' ' ,'U', 'T', 'C'}));
                 }
             }
-
-			public GItem (  )
-			{/*
-                //while (jsonInfo.Read())
-                {
-
-                }
-                try
-                {
-                    DataId = Convert.ToInt32( jsonInfo["data_id"] );
-                    Name = jsonInfo["name"];
-                    Rarity = Convert.ToInt32( jsonInfo["rarity"] );
-                    RestrictionLevel = Convert.ToInt32( jsonInfo["restriction_level"] );
-                    ImageURL = jsonInfo["img"];
-                    TypeId = Convert.ToInt32( jsonInfo["type_id"] );
-                    SubTypeId = Convert.ToInt32( jsonInfo["sub_type_id"] );
-                    PriceLastChanged = Convert.ToDateTime( jsonInfo["price_last_changed"] );
-                }
-                catch (Exception e)
-                {
-                    Console.WriteLine(e.ToString());
-                }*/
-			}
 
 			/// <summary>
 			/// Returns a <see cref="System.String"/> that represents the current <see cref="boe_se.Item"/>.
