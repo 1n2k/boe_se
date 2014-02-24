@@ -29,9 +29,9 @@ namespace boe_se
 
 			public Item ( XmlDictionaryReader jsonInfo )
 			{
-                while (jsonInfo.Read())
+                //while (jsonInfo.Read())
                 {
-                    Console.WriteLine(jsonInfo.Name + ": " + jsonInfo.Value);
+
                 }
                 try
                 {
@@ -107,6 +107,21 @@ namespace boe_se
                     return null;
 				}
 			}
+
+            /// <summary>
+            /// Gets the normalized sell/buy price at time time.
+            /// </summary>
+            /// <param name="time"></param>
+            /// <param name="sell">Specifies whether the result is a sell tuple or a buy tuple</param>
+            /// <returns></returns>
+            public Tuple<int, int> this[DateTime time, bool sell]
+            {
+                get
+                {
+                    return new Tuple<int, int>(0, 0);
+                }
+
+            }
 		}
 	}
 }
