@@ -1,7 +1,6 @@
 #gitignore
 
 *.exe
-*.dll
 *.a
 *.so
 /boe_se/bin/*
