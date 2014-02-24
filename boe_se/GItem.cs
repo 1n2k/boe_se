@@ -5,30 +5,50 @@ using System.Diagnostics;
 using System.Runtime.Serialization.Json;
 using System.Xml;
 
+using Newtonsoft.Json;
+
 namespace boe_se
 {
 	namespace Engine
-	{
-		public class Item
+    {
+		public class GItem
 		{
+            [JsonProperty("name")]
 			public string Name{ get; private set; }
 
+            [JsonProperty("data_id")]
 			public int DataId{ get; private set; }
 
+            [JsonProperty("rarity")]
 			public int Rarity{ get; private set; }
 
+            [JsonProperty("restriction_level")]
 			public int RestrictionLevel{ get; private set; }
 
+            [JsonProperty("img")]
 			public string ImageURL{ get; private set; }
 
+            [JsonProperty("type_id")]
 			public int TypeId{ get; private set; }
 
+            [JsonProperty("sub_type_id")]
 			public int SubTypeId{ get; private set; }
 
-			public DateTime PriceLastChanged { get; private set; }
+            [JsonProperty("price_last_changed")]
+            private string priceLastChanged
+            {
+                get; set;
+            }
+            public DateTime PriceLastChanged
+            {
+                get
+                {
+                    return Convert.ToDateTime(priceLastChanged.TrimEnd(new [] {' ' ,'U', 'T', 'C'}));
+                }
+            }
 
-			public Item ( XmlDictionaryReader jsonInfo )
-			{
+			public GItem (  )
+			{/*
                 //while (jsonInfo.Read())
                 {
 
@@ -47,7 +67,7 @@ namespace boe_se
                 catch (Exception e)
                 {
                     Console.WriteLine(e.ToString());
-                }
+                }*/
 			}
 
 			/// <summary>
@@ -73,7 +93,7 @@ namespace boe_se
 			/// </returns>
 			public override bool Equals (object obj)
 			{
-				return this.DataId == ((Item)obj).DataId;
+				return this.DataId == ((GItem)obj).DataId;
 			}
 		
 			/// <summary>
@@ -108,12 +128,14 @@ namespace boe_se
 				}
 			}
 
+            public int IntervalLength = 15;
+
             /// <summary>
             /// Gets the normalized sell/buy price at time time.
             /// </summary>
             /// <param name="time"></param>
             /// <param name="sell">Specifies whether the result is a sell tuple or a buy tuple</param>
-            /// <returns></returns>
+            /// <returns>Tuple of price and </returns>
             public Tuple<int, int> this[DateTime time, bool sell]
             {
                 get
