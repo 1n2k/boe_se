@@ -31,7 +31,7 @@ namespace boe_se
 			}
 			
 			public GItem getItem(string Name){
-                return null;
+                return Items.Find((GItem g) => g.Name == Name);
 			}
 		}
 	}
