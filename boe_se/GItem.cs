@@ -203,13 +203,7 @@ namespace boe_se
                     return this[First.AddMinutes(time * IntervalLength), sell];
                 }
             }
-        
-            public Tuple<int, int>[] verkaufspreis;
-        
-            public GItem(Tuple<int, int>[] _verkaufspreis)
-            {
-                verkaufspreis = _verkaufspreis;
-            }
+              
             public int kurs
             {
                 get
@@ -220,8 +214,8 @@ namespace boe_se
                     //-1 Kurs fallend => (jetzt) Verkaufen
                     //-2 keine Aussage (z.B. wegen zu wenig Werten)
 
-                    int a = getAverage(verkaufspreis);
-                    int b = getFormation(verkaufspreis);
+                    int a = getAverage();
+                    int b = getFormation();
                     if (a == -2 || a == 0)
                     {
                         return b;
@@ -237,10 +231,10 @@ namespace boe_se
                     return 0;
                 }
             }
-            private int getAverage(Tuple<int, int>[] verkaufswerte)
+            private int getAverage()
             {
-                int a = movingAverage(verkaufswerte);
-                int b = expAverage(verkaufswerte);
+                int a = movingAverage();
+                int b = expAverage();
                 if (a == -2 || a == 0)
                 {
                     return b;
@@ -255,7 +249,7 @@ namespace boe_se
                 }
                 return 0;
             }// -2  keine Angabe (z.B. nicht genug Werte), -1  fallender Kurs => Verkaufen, 0 nicht Handeln, 1 steigender Kurs => Kaufen
-            private int getFormation(Tuple<int, int>[] verkaufswerte)//Parameter: 1. Verkaufszeit 2. Preis 3. Menge // -2  keine Angabe (z.B. nicht genug Werte), -1  fallender Kurs => Verkaufen, 0 nicht Handeln, 1 steigender Kurs => Kaufen
+            private int getFormation()//Parameter: 1. Verkaufszeit 2. Preis 3. Menge // -2  keine Angabe (z.B. nicht genug Werte), -1  fallender Kurs => Verkaufen, 0 nicht Handeln, 1 steigender Kurs => Kaufen
             {
                 Tuple<int, int>[] verkaufswerteTemp = (Tuple<int, int>[])verkaufswerte.Clone();
                 Tuple<bool, Tuple<int, int>[], Tuple<int, int>> werte = mm(verkaufswerteTemp);
@@ -298,11 +292,11 @@ namespace boe_se
                     }
                 }
             }
-            private Tuple<bool, Tuple<int, int>[], Tuple<int, int>> mm(Tuple<int, int>[] verkaufswerte) //bool = true => vorletzter Punkt ist ein Hochpunkt
+            private Tuple<bool, Tuple<int, int>[], Tuple<int, int>> mm() //bool = true => vorletzter Punkt ist ein Hochpunkt
             {
                 bool a = false;
                 bool b = false;
-                Tuple<int, int>[] verkaufswerteUnverändert = (Tuple<int, int>[])verkaufswerte.Clone();
+                Tuple<int, int>[] verkaufswerteUnverändert;
                 Tuple<int, int> vorletzter = verkaufswerteUnverändert[verkaufswerteUnverändert.Length - 2];
                 for (int i = 1; i <= verkaufswerteUnverändert.Length - 2; i++)
                 {
