@@ -12,26 +12,26 @@ namespace boe_se
 			/// The items.
 			/// </summary>
             public List<GItem> Items;
-            private WebClient wc;
+            private WebClient WClient;
 
-			private static Lazy<Market> instance = new Lazy<Market>(() => new Market());
-			public static Market getInstance {
+			private static Lazy<Market> Instance = new Lazy<Market>(() => new Market());
+			public static Market GetInstance {
 				get {
-					return instance.Value;
+					return Instance.Value;
 				}
 			}
 
 			private Market ()
 			{
-                wc = new WebClient();
+                WClient = new WebClient();
 			}
 			
-			public GItem getItem(int ID) {
-                return JsonConvert.DeserializeObject<Dictionary<string, GItem>>(wc.DownloadString("http://www.gw2spidy.com/api/v0.9/json/item/" + ID))["result"];
+			public GItem GetItem(int id) {
+                return JsonConvert.DeserializeObject<Dictionary<string, GItem>>(WClient.DownloadString("http://www.gw2spidy.com/api/v0.9/json/item/" + id))["result"];
 			}
 			
-			public GItem getItem(string Name){
-                return Items.Find((GItem g) => g.Name == Name);
+			public GItem GetItem(string name){
+                return Items.Find((GItem g) => g.Name == name);
 			}
 		}
 	}

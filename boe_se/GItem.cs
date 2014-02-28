@@ -138,11 +138,11 @@ namespace boe_se
                 List<Tuple<DateTime, int, int>> list;
 
                 string mode = "sell";
-                list = sellList;
+                list = SellList;
                 goto NEXT;
             BUY:
                 mode = "buy";
-                list = buyList;
+                list = BuyList;
             NEXT:
                 GListingsResult g = JsonConvert.DeserializeObject<GListingsResult>(wc.DownloadString("http://www.gw2spidy.com/api/v0.9/json/listings/" + this.DataId + "/" + mode + "/1"));
                 list = g.Results;
@@ -157,23 +157,10 @@ namespace boe_se
                     goto BUY;
             }
 
-            private List<Tuple<DateTime, int, int>> sellList;
-            public List<Tuple<DateTime, int, int>> SellList
-            {
-                get
-                {
-                    return null;
-                }
-            }
+            public List<Tuple<DateTime, int, int>> SellList { private set; get; }
 
-            private List<Tuple<DateTime, int, int>> buyList;
-            public List<Tuple<DateTime, int, int>> BuyList
-            {
-                get
-                {
-                    return null;
-                }
-            }
+            public List<Tuple<DateTime, int, int>> BuyList { private set; get; }
+
 
             public DateTime First = new DateTime();
             public int IntervalLength = 15;
@@ -188,7 +175,7 @@ namespace boe_se
             {
                 get
                 {
-                    var list = sell ? sellList : buyList;
+                    var list = sell ? SellList : BuyList;
                     DateTime nTime = time.AddMinutes(15);
 
                     int i = list.FindIndex((Tuple<DateTime, int, int> a) =>
