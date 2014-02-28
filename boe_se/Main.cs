@@ -8,8 +8,9 @@ namespace boe_se
 		public static void Main (string[] args)
 		{
             GItem a = Market.getInstance.getItem(443);
+            GItem b = Market.getInstance.Items[443];
 
-			Console.WriteLine ("Hello World! " + a.Name + ", last changed: " + a.PriceLastChanged);
+			Console.WriteLine ("Hello World! " + b.Name + ", last changed: " + b.PriceLastChanged);
             Console.ReadLine();
 		}
 	}

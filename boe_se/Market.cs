@@ -24,11 +24,14 @@ namespace boe_se
 			private Market ()
 			{
                 wc = new WebClient();
+                string allItems = wc.DownloadString("http://www.gw2spidy.com/api/v0.9/json/all-items/all");
+                Items=JsonConvert.DeserializeObject<Dictionary<string, List<GItem>>>(allItems)["result"];
 			}
 			
 			public GItem getItem(int ID) {
                 return JsonConvert.DeserializeObject<Dictionary<string, GItem>>(wc.DownloadString("http://www.gw2spidy.com/api/v0.9/json/item/" + ID))["result"];
-			}
+
+            }
 			
 			public GItem getItem(string Name){
                 return Items.Find((GItem g) => g.Name == Name);
