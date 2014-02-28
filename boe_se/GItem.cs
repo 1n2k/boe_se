@@ -297,6 +297,10 @@ namespace boe_se
                 bool a = false;
                 bool b = false;
                 Tuple<int, int>[] verkaufswerteUnverändert;
+
+                List<Tuple<int, int>> V = new List<Tuple<int, int>>();
+
+
                 Tuple<int, int> vorletzter = verkaufswerteUnverändert[verkaufswerteUnverändert.Length - 2];
                 for (int i = 1; i <= verkaufswerteUnverändert.Length - 2; i++)
                 {
