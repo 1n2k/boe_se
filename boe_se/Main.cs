@@ -14,7 +14,6 @@ namespace boe_se
             a.Refresh();
 
             Console.WriteLine("Hello World! " + a.Name + ", last changed: " + a.PriceLastChanged);
-
             Console.ReadLine();
 		}
 	}
