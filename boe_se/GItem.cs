@@ -302,13 +302,13 @@ namespace boe_se
             {
                 bool a = false;
                 bool b = false;
-                Tuple<int, int>[] verkaufswerteUnverändert = (Tuple<int, int>[])verkaufswerte.Clone();
-                Tuple<int, int> vorletzter = verkaufswerteUnverändert[verkaufswerteUnverändert.Length - 2];
-                for (int i = 1; i <= verkaufswerteUnverändert.Length - 2; i++)
+                Tuple<int, int>[] verkaufswerteUnverï¿½ndert = (Tuple<int, int>[])verkaufswerte.Clone();
+                Tuple<int, int> vorletzter = verkaufswerteUnverï¿½ndert[verkaufswerteUnverï¿½ndert.Length - 2];
+                for (int i = 1; i <= verkaufswerteUnverï¿½ndert.Length - 2; i++)
                 {
                     if (i - 1 >= 0)
                     {
-                        if ((verkaufswerteUnverändert[i].Item1 > verkaufswerteUnverändert[(i - 1)].Item1 && verkaufswerteUnverändert[i].Item1 > verkaufswerteUnverändert[(i + 1)].Item1))
+                        if ((verkaufswerteUnverï¿½ndert[i].Item1 > verkaufswerteUnverï¿½ndert[(i - 1)].Item1 && verkaufswerteUnverï¿½ndert[i].Item1 > verkaufswerteUnverï¿½ndert[(i + 1)].Item1))
                         {
                             //Console.WriteLine("Nope");
                             b = true;
@@ -316,7 +316,7 @@ namespace boe_se
                         }
                         else
                         {
-                            if (((verkaufswerteUnverändert[i].Item1 < verkaufswerteUnverändert[(i - 1)].Item1) && (verkaufswerteUnverändert[i].Item1 < verkaufswerteUnverändert[(i + 1)].Item1)))
+                            if (((verkaufswerteUnverï¿½ndert[i].Item1 < verkaufswerteUnverï¿½ndert[(i - 1)].Item1) && (verkaufswerteUnverï¿½ndert[i].Item1 < verkaufswerteUnverï¿½ndert[(i + 1)].Item1)))
                             {
                                 //Console.WriteLine("Nope");
                                 b = false;
@@ -363,7 +363,7 @@ namespace boe_se
                 {
                     return false;
                 }
-                if (werte[0].Item1 >= werte[2].Item1)
+                if (werte[0].Item1 <= werte[2].Item1)
                 {
                     return false;
                 }
@@ -406,7 +406,7 @@ namespace boe_se
                 {
                     return false;
                 }
-                if (werte[0].Item1 <= werte[2].Item1)
+                if (werte[0].Item1 >= werte[2].Item1)
                 {
                     return false;
                 }
