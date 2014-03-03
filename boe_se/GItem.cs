@@ -300,15 +300,14 @@ namespace boe_se
             }
             private Tuple<bool, Tuple<int, int>[], Tuple<int, int>> mm(Tuple<int, int>[] verkaufswerte) //bool = true => vorletzter Punkt ist ein Hochpunkt
             {
-                bool a = false;
                 bool b = false;
-                Tuple<int, int>[] verkaufswerteUnver�ndert = (Tuple<int, int>[])verkaufswerte.Clone();
-                Tuple<int, int> vorletzter = verkaufswerteUnver�ndert[verkaufswerteUnver�ndert.Length - 2];
-                for (int i = 1; i <= verkaufswerteUnver�ndert.Length - 2; i++)
+                Tuple<int, int>[] verkaufswerteUnveraendert = (Tuple<int, int>[])verkaufswerte.Clone();
+                Tuple<int, int> vorletzter = verkaufswerteUnveraendert[verkaufswerteUnveraendert.Length - 2];
+                for (int i = 1; i <= verkaufswerteUnveraendert.Length - 2; i++)
                 {
                     if (i - 1 >= 0)
                     {
-                        if ((verkaufswerteUnver�ndert[i].Item1 > verkaufswerteUnver�ndert[(i - 1)].Item1 && verkaufswerteUnver�ndert[i].Item1 > verkaufswerteUnver�ndert[(i + 1)].Item1))
+                        if ((verkaufswerteUnveraendert[i].Item1 > verkaufswerteUnveraendert[(i - 1)].Item1 && verkaufswerteUnveraendert[i].Item1 > verkaufswerteUnveraendert[(i + 1)].Item1))
                         {
                             //Console.WriteLine("Nope");
                             b = true;
@@ -316,7 +315,7 @@ namespace boe_se
                         }
                         else
                         {
-                            if (((verkaufswerteUnver�ndert[i].Item1 < verkaufswerteUnver�ndert[(i - 1)].Item1) && (verkaufswerteUnver�ndert[i].Item1 < verkaufswerteUnver�ndert[(i + 1)].Item1)))
+                            if (((verkaufswerteUnveraendert[i].Item1 < verkaufswerteUnveraendert[(i - 1)].Item1) && (verkaufswerteUnveraendert[i].Item1 < verkaufswerteUnveraendert[(i + 1)].Item1)))
                             {
                                 //Console.WriteLine("Nope");
                                 b = false;
@@ -514,40 +513,39 @@ namespace boe_se
             }
             private int[] movingAverageShortGraph(Tuple<int, int>[] verkaufspreise) //Parameter: 1. Preis, 2. Menge //-2 keine Aussage (z.B. wegen zu wenig Werten); -1 Kurs fallend => (jetzt) Verkaufen, 0 nicht Handeln, 1 Kurs steigend => (jetzt) Kaufen 
             {//Graph vom kurzfristigen gleitenden Durhschnitt
-                if (verkaufspreise.Length < 200)
+                int shortma = 50;
+                if (verkaufspreise.Length < shortma)
                 {
                     return null;
                 }
-                int[] shortMA = new int[verkaufspreise.Length - 200];
-                int shortma = 50;
-                int longma = 200;
-                for (int j = longma - 1; j < verkaufspreise.Length; j++)
+                int[] shortMA = new int[verkaufspreise.Length - shortma];
+                for (int j = shortma - 1; j < verkaufspreise.Length; j++)
                 {
                     int temp = 0;
                     for (int i = 0; i < shortma; i++)
                     {
-                        temp = temp + (verkaufspreise[verkaufspreise.Length - i]).Item1;
+                        temp = temp + (verkaufspreise[j - i]).Item1;
                     }
-                    shortMA[j] = temp / shortma;
+                    shortMA[j-shortma+1] = temp / shortma;
                 }
                 return shortMA;
             }
             private int[] movingAverageLongGraph(Tuple<int, int>[] verkaufspreise) //Parameter: 1. Preis, 2. Menge //-2 keine Aussage (z.B. wegen zu wenig Werten); -1 Kurs fallend => (jetzt) Verkaufen, 0 nicht Handeln, 1 Kurs steigend => (jetzt) Kaufen 
             {//Graph vom langfristigen gleitenden Durhschnitt
-                if (verkaufspreise.Length < 200)
+                int longma = 200;
+                if (verkaufspreise.Length < longma)
                 {
                     return null;
                 }
-                int[] longMA = new int[verkaufspreise.Length - 200];
-                int longma = 200;
+                int[] longMA = new int[verkaufspreise.Length - longma];
                 for (int j = longma - 1; j < verkaufspreise.Length; j++)
                 {
                     int temp = 0;
                     for (int i = 0; i < longma; i++)
                     {
-                        temp = temp + (verkaufspreise[verkaufspreise.Length - i]).Item1;
+                        temp = temp + (verkaufspreise[j - i]).Item1;
                     }
-                    longMA[j] = temp / longma;
+                    longMA[j-longma+1] = temp / longma;
                 }
                 return longMA;
             }
@@ -566,25 +564,25 @@ namespace boe_se
                 int temp = 0;
                 for (int i = 0; i < shortma; i++)
                 {
-                    temp = temp + (verkaufspreise[verkaufspreise.Length - i - 1]).Item1;
+                    temp = temp + (verkaufspreise[verkaufspreise.Length - i - 2]).Item1;
                 }
                 lastSMA = temp / shortma;
                 temp = 0;
                 for (int i = 0; i < shortma; i++)
                 {
-                    temp = temp + (verkaufspreise[verkaufspreise.Length - i]).Item1;
+                    temp = temp + (verkaufspreise[verkaufspreise.Length - i - 1]).Item1;
                 }
                 nowSMA = temp / shortma;
                 temp = 0;
                 for (int i = 0; i < longma; i++)
                 {
-                    temp = temp + (verkaufspreise[verkaufspreise.Length - i - 1]).Item1;
+                    temp = temp + (verkaufspreise[verkaufspreise.Length - i - 2]).Item1;
                 }
                 lastLMA = temp / longma;
                 temp = 0;
                 for (int i = 0; i < longma; i++)
                 {
-                    temp = temp + (verkaufspreise[verkaufspreise.Length - i]).Item1;
+                    temp = temp + (verkaufspreise[verkaufspreise.Length - i - 1]).Item1;
                 }
                 nowLMA = temp / longma;
 
@@ -622,11 +620,11 @@ namespace boe_se
                 int stocklast = (verkaufspreise[verkaufspreise.Length - 2]).Item1;
                 int expnow = expMA[expMA.Length - 1];
                 int explast = expMA[expMA.Length - 2];
-                if (explast > stocklast && expnow < stocknow)
+                if (explast >= stocklast && expnow < stocknow)
                 {
                     return 1;
                 }
-                if (explast < stocklast && expnow > stocknow)
+                if (explast <= stocklast && expnow > stocknow)
                 {
                     return -1;
                 }
