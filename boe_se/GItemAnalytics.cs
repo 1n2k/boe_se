@@ -94,31 +94,34 @@ namespace boe_se
 
 			private Tuple<bool, Tuple<int, int>[], Tuple<int, int>> mm () //bool = true => vorletzter Punkt ist ein Hochpunkt
 			{
-				bool a = false;
 				bool b = false;
-				Tuple<int, int>[] verkaufswerteUnverändert = new Tuple<int, int>[]{}; //Todo: What's this?
+                var verkaufswerte = GetCompiledItemValues();
+				Tuple<int, int>[] verkaufswerteUnveraendert = (Tuple<int, int>[]) verkaufswerte.Clone(); //Todo: What's this?
 
 				List<Tuple<int, int>> V = new List<Tuple<int, int>> ();
 
 
-				Tuple<int, int> vorletzter = verkaufswerteUnverändert [verkaufswerteUnverändert.Length - 2];
-				for (int i = 1; i <= verkaufswerteUnverändert.Length - 2; i++) {
+                Tuple<int, int> vorletzter = verkaufswerteUnveraendert[verkaufswerteUnveraendert.Length - 2];
+                for (int i = 1; i <= verkaufswerteUnveraendert.Length - 2; i++)
+                {
 					if (i - 1 >= 0) {
-						if ((verkaufswerteUnverändert [i].Item1 > verkaufswerteUnverändert [(i - 1)].Item1 && verkaufswerteUnverändert [i].Item1 > verkaufswerteUnverändert [(i + 1)].Item1)) {
+                        if ((verkaufswerteUnveraendert[i].Item1 > verkaufswerteUnveraendert[(i - 1)].Item1 && verkaufswerteUnveraendert[i].Item1 > verkaufswerteUnveraendert[(i + 1)].Item1))
+                        {
 							//Console.WriteLine("Nope");
 							b = true;
 
 						} else {
-							if (((verkaufswerteUnverändert [i].Item1 < verkaufswerteUnverändert [(i - 1)].Item1) && (verkaufswerteUnverändert [i].Item1 < verkaufswerteUnverändert [(i + 1)].Item1))) {
+                            if (((verkaufswerteUnveraendert[i].Item1 < verkaufswerteUnveraendert[(i - 1)].Item1) && (verkaufswerteUnveraendert[i].Item1 < verkaufswerteUnveraendert[(i + 1)].Item1)))
+                            {
 								//Console.WriteLine("Nope");
 								b = false;
 							} else {
-								//verkaufswerte [i] = null;
+								verkaufswerte [i] = null;
 							}
 						}
 					}
 				}
-				return new Tuple<bool, Tuple<int, int>[], Tuple<int, int>> (b, GetCompiledItemValues(true), vorletzter);
+				return new Tuple<bool, Tuple<int, int>[], Tuple<int, int>> (b, verkaufswerte, vorletzter);
 			}
 
 			private bool getM (Tuple<bool, Tuple<int, int>[], Tuple<int, int>> verkaufswerte) //false kein M oder zu wenig Hoch/Tiefpunkte; true ist ein M => verkaufen
@@ -276,18 +279,20 @@ namespace boe_se
 			{//Graph vom kurzfristigen gleitenden Durhschnitt
 
 				var verkaufspreise = GetCompiledItemValues();
-				if (verkaufspreise.Length < 200) {
+                int shortma = 50;
+                if (verkaufspreise.Length < shortma)
+                {
 					return null;
 				}
-				int[] shortMA = new int[verkaufspreise.Length - 200];
-				int shortma = 50;
-				int longma = 200;
-				for (int j = longma - 1; j < verkaufspreise.Length; j++) {
+                int[] shortMA = new int[verkaufspreise.Length - shortma];
+
+                for (int j = shortma - 1; j < verkaufspreise.Length; j++)
+                {
 					int temp = 0;
 					for (int i = 0; i < shortma; i++) {
-						temp = temp + (verkaufspreise [verkaufspreise.Length - i]).Item1;
+						temp = temp + (verkaufspreise [j - i]).Item1;
 					}
-					shortMA [j] = temp / shortma;
+					shortMA [j - shortma + 1] = temp / shortma;
 				}
 				return shortMA;
 			}
@@ -295,18 +300,19 @@ namespace boe_se
 			private int[] movingAverageLongGraph () //Parameter: 1. Preis, 2. Menge //-2 keine Aussage (z.B. wegen zu wenig Werten); -1 Kurs fallend => (jetzt) Verkaufen, 0 nicht Handeln, 1 Kurs steigend => (jetzt) Kaufen
 			{//Graph vom langfristigen gleitenden Durhschnitt
 				var verkaufspreise = GetCompiledItemValues();
-
-				if (verkaufspreise.Length < 200) {
+                int longma = 200;
+                if (verkaufspreise.Length < longma)
+                {
 					return null;
 				}
-				int[] longMA = new int[verkaufspreise.Length - 200];
-				int longma = 200;
+                int[] longMA = new int[verkaufspreise.Length - longma];
+				
 				for (int j = longma - 1; j < verkaufspreise.Length; j++) {
 					int temp = 0;
 					for (int i = 0; i < longma; i++) {
-						temp = temp + (verkaufspreise [verkaufspreise.Length - i]).Item1;
+						temp = temp + (verkaufspreise [j - i]).Item1;
 					}
-					longMA [j] = temp / longma;
+                    longMA[j - longma + 1] = temp / longma;
 				}
 				return longMA;
 			}
@@ -316,7 +322,9 @@ namespace boe_se
 				
 				var verkaufspreise = GetCompiledItemValues();
 
-				if (verkaufspreise.Length < 200) {
+                int longma = 200;
+                if (verkaufspreise.Length < longma)
+                {
 					return -2;
 				}
 				int lastSMA;
@@ -324,32 +332,31 @@ namespace boe_se
 				int lastLMA;
 				int nowLMA;
 				int shortma = 50;
-				int longma = 200;
 				int temp = 0;
 				for (int i = 0; i < shortma; i++) {
-					temp = temp + (verkaufspreise [verkaufspreise.Length - i - 1]).Item1;
+					temp = temp + (verkaufspreise [verkaufspreise.Length - i - 2]).Item1;
 				}
 				lastSMA = temp / shortma;
 				temp = 0;
 				for (int i = 0; i < shortma; i++) {
-					temp = temp + (verkaufspreise [verkaufspreise.Length - i]).Item1;
+					temp = temp + (verkaufspreise [verkaufspreise.Length - i - 1]).Item1;
 				}
 				nowSMA = temp / shortma;
 				temp = 0;
 				for (int i = 0; i < longma; i++) {
-					temp = temp + (verkaufspreise [verkaufspreise.Length - i - 1]).Item1;
+					temp = temp + (verkaufspreise [verkaufspreise.Length - i - 2]).Item1;
 				}
 				lastLMA = temp / longma;
 				temp = 0;
 				for (int i = 0; i < longma; i++) {
-					temp = temp + (verkaufspreise [verkaufspreise.Length - i]).Item1;
+					temp = temp + (verkaufspreise [verkaufspreise.Length - i - 1]).Item1;
 				}
 				nowLMA = temp / longma;
 
-				if (lastLMA > lastSMA && nowLMA < nowSMA) {
+				if (lastLMA >= lastSMA && nowLMA < nowSMA) {
 					return 1;
 				}
-				if (lastLMA < lastSMA && nowLMA > nowSMA) {
+				if (lastLMA <= lastSMA && nowLMA > nowSMA) {
 					return -1;
 				}
 				return 0;
@@ -370,6 +377,10 @@ namespace boe_se
 			private int expAverage ()//Ergebnis des Analyseinstruments exp. gleit. Durchschnitt
 			{
 				var verkaufspreise = GetCompiledItemValues();
+                if (verkaufspreise.Length < 50)
+                {
+                    return -2;
+                }
 				int[] expMA = new int[verkaufspreise.Length];
 				expMA [0] = (verkaufspreise [0]).Item1;
 				expMA [1] = expMA [0] + (2 / 3) * ((verkaufspreise [1]).Item1 - expMA [0]);
