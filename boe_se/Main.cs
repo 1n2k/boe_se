@@ -18,7 +18,10 @@ namespace boe_se
             watch.Start();
             foreach (GItem item in items)
             {
-                Console.WriteLine(item.kurs);
+                if (item.DataId == 19699)
+                {
+                    Console.WriteLine(item.kurs);
+                }
             }
             watch.Stop();
             Console.WriteLine(watch.ElapsedMilliseconds + " ms mit Ausgabe");

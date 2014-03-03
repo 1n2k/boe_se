@@ -9,6 +9,11 @@ namespace boe_se
 		{
 			public int kurs {
 				get {
+                    var z = GetCompiledItemValues();
+                    if (GetCompiledItemValues().Length <= 50)
+                    {
+                        return -2;
+                    }
 					//Bedeutungen der Vergleichswerte:
 					// 1 Kurs steigend => (jetzt) Kaufen
 					// 0 nicht Handeln
@@ -96,11 +101,7 @@ namespace boe_se
 			{
 				bool b = false;
                 var verkaufswerte = GetCompiledItemValues();
-				Tuple<int, int>[] verkaufswerteUnveraendert = (Tuple<int, int>[]) verkaufswerte.Clone(); //Todo: What's this?
-
-				List<Tuple<int, int>> V = new List<Tuple<int, int>> ();
-
-
+				Tuple<int, int>[] verkaufswerteUnveraendert = (Tuple<int, int>[]) verkaufswerte.Clone();
                 Tuple<int, int> vorletzter = verkaufswerteUnveraendert[verkaufswerteUnveraendert.Length - 2];
                 for (int i = 1; i <= verkaufswerteUnveraendert.Length - 2; i++)
                 {
