@@ -4,4 +4,4 @@
 *.a
 *.so
 /boe_se/bin/*
-/boese/obj/*
+/boe_se/obj/*
