@@ -14,13 +14,13 @@ namespace boe_se
         public class GListing
         {
             [JsonProperty("unit_price")]
-            public int UnitPrice { get; private set; }
+            public int UnitPrice { get; set; }
 
             [JsonProperty("quantity")]
-            public int Quantity { get; private set; }
+            public int Quantity { get; set; }
 
             [JsonProperty("listings")]
-            public int Listings { get; private set; }
+            public int Listings { get; set; }
 
             [JsonProperty("listing_datetime")]
             private string listingDatetime
@@ -124,7 +124,7 @@ namespace boe_se
                 [JsonProperty("last_page")]
                 public int LastPage;
                 [JsonProperty("results")]
-                public List<Tuple<DateTime, int, int>> Results;
+                public List<GListing> Results;
             }
 
             /// <summary>
@@ -145,12 +145,16 @@ namespace boe_se
                 GListingsResult g = JsonConvert.DeserializeObject<GListingsResult>(wc.DownloadString("http://www.gw2spidy.com/api/v0.9/json/listings/" + this.DataId + "/" + mode + "/1"));
 
                 list = new List<Tuple<DateTime, int, int>>();
-                list.AddRange(g.Results);
+
+                foreach (var item in g.Results)
+                    list.Add(item);
 
                 while (g.Page < g.LastPage)
                 {
-                    g = JsonConvert.DeserializeObject<GListingsResult>(wc.DownloadString("http://www.gw2spidy.com/api/v0.9/json/listings/" + this.DataId + "/"+ mode + "/" + g.Page + 1));
-                    list.AddRange(g.Results);
+                    g = JsonConvert.DeserializeObject<GListingsResult>(wc.DownloadString("http://www.gw2spidy.com/api/v0.9/json/listings/" + this.DataId + "/"+ mode + "/" + (++g.Page)));
+
+                    foreach (var item in g.Results)
+                        list.Add(item);
                 }
 
                 if (mode == "sell")
@@ -167,7 +171,7 @@ namespace boe_se
             public List<Tuple<DateTime, int, int>> BuyList { private set; get; }
 
 
-            public DateTime First = new DateTime();
+            public DateTime First;
             public int IntervalLength = 15;
 
             /// <summary>
@@ -180,8 +184,14 @@ namespace boe_se
             {
                 get
                 {
-                    if(SellList == null || BuyList == null)
+
+                    if (SellList == null || BuyList == null)
+                    {
+                        Debug.WriteLine("Getting Data for Item " + this.DataId + "\n");
                         this.Refresh();
+                    }
+                    if (First == default(DateTime))
+                        First = sell ? SellList[0].Item1 : BuyList[0].Item1;
 
                     var list = sell ? SellList : BuyList;
                     DateTime nTime = time.AddMinutes(15);
@@ -211,6 +221,10 @@ namespace boe_se
             {
                 get
                 {
+                    if (First == default(DateTime))
+                    {
+                        var t = this[First, sell];
+                    }
                     return this[First.AddMinutes(time * IntervalLength), sell];
                 }
             }
