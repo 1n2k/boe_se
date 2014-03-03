@@ -116,9 +116,7 @@ namespace boe_se
             {
                 return this.DataId;
             }
-
-
-
+            
             class GListingsResult
             {
                 [JsonProperty("page")]
@@ -145,7 +143,9 @@ namespace boe_se
                 list = BuyList;
             NEXT:
                 GListingsResult g = JsonConvert.DeserializeObject<GListingsResult>(wc.DownloadString("http://www.gw2spidy.com/api/v0.9/json/listings/" + this.DataId + "/" + mode + "/1"));
-                list = g.Results;
+
+                list = new List<Tuple<DateTime, int, int>>();
+                list.AddRange(g.Results);
 
                 while (g.Page < g.LastPage)
                 {
@@ -154,7 +154,12 @@ namespace boe_se
                 }
 
                 if (mode == "sell")
+                {
+                    SellList = list;
                     goto BUY;
+                }
+                else
+                    BuyList = list;
             }
 
             public List<Tuple<DateTime, int, int>> SellList { private set; get; }
@@ -175,6 +180,9 @@ namespace boe_se
             {
                 get
                 {
+                    if(SellList == null || BuyList == null)
+                        this.Refresh();
+
                     var list = sell ? SellList : BuyList;
                     DateTime nTime = time.AddMinutes(15);
 
@@ -187,7 +195,7 @@ namespace boe_se
                     int quantity = 0;
                     double price = 0;
 
-                    for (; list[i].Item1.CompareTo(nTime) <= 0; i++)
+                    for (; i < list.Count && list[i].Item1.CompareTo(nTime) <= 0; i++)
                     {
                         price += list[i].Item2 * list[i].Item3;
                         quantity += list[i].Item3;

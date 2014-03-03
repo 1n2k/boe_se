@@ -8,7 +8,8 @@ namespace boe_se
 		public static void Main (string[] args)
 		{
             foreach (var item in Market.GetInstance.Items)
-                Console.WriteLine(item.kurs);
+                if(item.DataId == 440)
+                    Console.WriteLine(item.kurs);
 
             Console.ReadLine();
 		}
