@@ -7,13 +7,9 @@ namespace boe_se
 	{
 		public static void Main (string[] args)
 		{
-            GItem a = Market.GetInstance.GetItem(443);
+            foreach (var item in Market.GetInstance.Items)
+                Console.WriteLine(item.kurs);
 
-			Console.WriteLine ("Hello World! " + a.Name + ", last changed: " + a.PriceLastChanged);
-
-            a.Refresh();
-
-            Console.WriteLine("Hello World! " + a.Name + ", last changed: " + a.PriceLastChanged);
             Console.ReadLine();
 		}
 	}
