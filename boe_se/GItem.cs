@@ -218,7 +218,10 @@ namespace boe_se
                         price += list[i].Item2 * list[i].Item3;
                         quantity += list[i].Item3;
                     }
-                    price /= quantity * (decimal)1.0;
+                    if (quantity != 0)
+                        price /= quantity * (decimal)1.0;
+                    else
+                        price = 0;
 
                     return new Tuple<int, int>((int)price, quantity);
                 }
