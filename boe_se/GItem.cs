@@ -41,12 +41,7 @@ namespace boe_se
                 return new Tuple<DateTime, int, int>(gListing.ListingDatetime, gListing.Quantity, gListing.UnitPrice);
             }
         }
-
-        public class GItemIDConverter
-        {
-
-        }
-
+        
         public partial class GItem
         {
             [JsonProperty("name")]
