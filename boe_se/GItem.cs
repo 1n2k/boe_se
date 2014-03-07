@@ -196,7 +196,7 @@ namespace boe_se
                         First = sell ? SellList[0].Item1 : BuyList[0].Item1;
 
                     var list = sell ? SellList : BuyList;
-                    DateTime nTime = time.AddMinutes(15);
+                    DateTime nTime = time.AddMinutes(IntervalLength);
 
                     if (time.CompareTo(list[list.Count - 1].Item1) > 0)
                         return null;
