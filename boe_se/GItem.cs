@@ -14,13 +14,13 @@ namespace boe_se
         public class GListing
         {
             [JsonProperty("unit_price")]
-            public int UnitPrice { get; private set; }
+            public int UnitPrice { get; set; }
 
             [JsonProperty("quantity")]
-            public int Quantity { get; private set; }
+            public int Quantity { get; set; }
 
             [JsonProperty("listings")]
-            public int Listings { get; private set; }
+            public int Listings { get; set; }
 
             [JsonProperty("listing_datetime")]
             private string listingDatetime
@@ -116,9 +116,7 @@ namespace boe_se
             {
                 return this.DataId;
             }
-
-
-
+            
             class GListingsResult
             {
                 [JsonProperty("page")]
@@ -126,7 +124,7 @@ namespace boe_se
                 [JsonProperty("last_page")]
                 public int LastPage;
                 [JsonProperty("results")]
-                public List<Tuple<DateTime, int, int>> Results;
+                public List<GListing> Results;
             }
 
             /// <summary>
@@ -145,16 +143,29 @@ namespace boe_se
                 list = BuyList;
             NEXT:
                 GListingsResult g = JsonConvert.DeserializeObject<GListingsResult>(wc.DownloadString("http://www.gw2spidy.com/api/v0.9/json/listings/" + this.DataId + "/" + mode + "/1"));
-                list = g.Results;
+
+                list = new List<Tuple<DateTime, int, int>>();
+
+                foreach (var item in g.Results)
+                    list.Add(item);
 
                 while (g.Page < g.LastPage)
                 {
-                    g = JsonConvert.DeserializeObject<GListingsResult>(wc.DownloadString("http://www.gw2spidy.com/api/v0.9/json/listings/" + this.DataId + "/"+ mode + "/" + g.Page + 1));
-                    list.AddRange(g.Results);
+                    g = JsonConvert.DeserializeObject<GListingsResult>(wc.DownloadString("http://www.gw2spidy.com/api/v0.9/json/listings/" + this.DataId + "/"+ mode + "/" + (++g.Page)));
+
+                    foreach (var item in g.Results)
+                        list.Add(item);
                 }
 
                 if (mode == "sell")
+                {
+                    SellList = list;
                     goto BUY;
+                }
+                else
+                    BuyList = list;
+                BuyList.Sort();
+                SellList.Sort();
             }
 
             public List<Tuple<DateTime, int, int>> SellList { private set; get; }
@@ -162,7 +173,7 @@ namespace boe_se
             public List<Tuple<DateTime, int, int>> BuyList { private set; get; }
 
 
-            public DateTime First = new DateTime();
+            public DateTime First;
             public int IntervalLength = 15;
 
             /// <summary>
@@ -175,24 +186,39 @@ namespace boe_se
             {
                 get
                 {
+
+                    if (SellList == null || BuyList == null)
+                    {
+                        Debug.WriteLine("Getting Data for Item " + this.DataId + "\n");
+                        this.Refresh();
+                    }
+                    if (First == default(DateTime))
+                        First = sell ? SellList[0].Item1 : BuyList[0].Item1;
+
                     var list = sell ? SellList : BuyList;
                     DateTime nTime = time.AddMinutes(15);
+
+                    if (time.CompareTo(list[list.Count - 1].Item1) > 0)
+                        return null;
 
                     int i = list.FindIndex((Tuple<DateTime, int, int> a) =>
                         a.Item1.CompareTo(time) >= 0 && a.Item1.CompareTo(nTime) <= 0);
 
-					if(i < 0 || i >= list.Count)
-						return null;
+					if(i < 0)
+						return new Tuple<int,int>(0,0);
+
+                    if (i >= list.Count)
+                        return null;
 
                     int quantity = 0;
-                    double price = 0;
+                    decimal price = 0;
 
-                    for (; list[i].Item1.CompareTo(nTime) <= 0; i++)
+                    for (; i < list.Count && list[i].Item1.CompareTo(nTime) <= 0; i++)
                     {
                         price += list[i].Item2 * list[i].Item3;
                         quantity += list[i].Item3;
                     }
-                    price /= quantity * 1.0;
+                    price /= quantity * (decimal)1.0;
 
                     return new Tuple<int, int>((int)price, quantity);
                 }
@@ -203,6 +229,10 @@ namespace boe_se
             {
                 get
                 {
+                    if (First == default(DateTime))
+                    {
+                        var t = this[First, sell];
+                    }
                     return this[First.AddMinutes(time * IntervalLength), sell];
                 }
             }

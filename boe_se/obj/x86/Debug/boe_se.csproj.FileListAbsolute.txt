@@ -6,11 +6,3 @@ H:\boe_se\boe_se\obj\x86\Debug\boe_se.pdb
 H:\boe_se\boe_se\bin\Debug\Newtonsoft.Json.dll
 H:\boe_se\boe_se\bin\Debug\Newtonsoft.Json.pdb
 H:\boe_se\boe_se\bin\Debug\Newtonsoft.Json.xml
-H:\GW2 Aktienzeug\Aktien (github)\boe_se\bin\Debug\boe_se.exe
-H:\GW2 Aktienzeug\Aktien (github)\boe_se\bin\Debug\boe_se.pdb
-H:\GW2 Aktienzeug\Aktien (github)\boe_se\bin\Debug\Newtonsoft.Json.dll
-H:\GW2 Aktienzeug\Aktien (github)\boe_se\bin\Debug\Newtonsoft.Json.pdb
-H:\GW2 Aktienzeug\Aktien (github)\boe_se\bin\Debug\Newtonsoft.Json.xml
-H:\GW2 Aktienzeug\Aktien (github)\boe_se\obj\x86\Debug\ResolveAssemblyReference.cache
-H:\GW2 Aktienzeug\Aktien (github)\boe_se\obj\x86\Debug\boe_se.exe
-H:\GW2 Aktienzeug\Aktien (github)\boe_se\obj\x86\Debug\boe_se.pdb
