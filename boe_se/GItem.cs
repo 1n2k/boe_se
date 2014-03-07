@@ -164,6 +164,8 @@ namespace boe_se
                 }
                 else
                     BuyList = list;
+                BuyList.Sort();
+                SellList.Sort();
             }
 
             public List<Tuple<DateTime, int, int>> SellList { private set; get; }
@@ -196,21 +198,27 @@ namespace boe_se
                     var list = sell ? SellList : BuyList;
                     DateTime nTime = time.AddMinutes(15);
 
+                    if (time.CompareTo(list[list.Count - 1].Item1) > 0)
+                        return null;
+
                     int i = list.FindIndex((Tuple<DateTime, int, int> a) =>
                         a.Item1.CompareTo(time) >= 0 && a.Item1.CompareTo(nTime) <= 0);
 
-					if(i < 0 || i >= list.Count)
-						return null;
+					if(i < 0)
+						return new Tuple<int,int>(0,0);
+
+                    if (i >= list.Count)
+                        return null;
 
                     int quantity = 0;
-                    double price = 0;
+                    decimal price = 0;
 
                     for (; i < list.Count && list[i].Item1.CompareTo(nTime) <= 0; i++)
                     {
                         price += list[i].Item2 * list[i].Item3;
                         quantity += list[i].Item3;
                     }
-                    price /= quantity * 1.0;
+                    price /= quantity * (decimal)1.0;
 
                     return new Tuple<int, int>((int)price, quantity);
                 }

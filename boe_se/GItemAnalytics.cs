@@ -7,10 +7,11 @@ namespace boe_se
 	{
 		public partial class GItem
 		{
+            private Tuple<int, int>[] compiledItemValues;
 			public int kurs {
 				get {
-                    var z = GetCompiledItemValues();
-                    if (GetCompiledItemValues().Length <= 50)
+                    compiledItemValues = GetCompiledItemValues();
+                    if (compiledItemValues.Length <= 50)
                     {
                         return -2;
                     }
@@ -100,7 +101,7 @@ namespace boe_se
 			private Tuple<bool, Tuple<int, int>[], Tuple<int, int>> mm () //bool = true => vorletzter Punkt ist ein Hochpunkt
 			{
 				bool b = false;
-                var verkaufswerte = GetCompiledItemValues();
+                var verkaufswerte = compiledItemValues;
 				Tuple<int, int>[] verkaufswerteUnveraendert = (Tuple<int, int>[]) verkaufswerte.Clone();
                 Tuple<int, int> vorletzter = verkaufswerteUnveraendert[verkaufswerteUnveraendert.Length - 2];
                 for (int i = 1; i <= verkaufswerteUnveraendert.Length - 2; i++)
@@ -279,7 +280,7 @@ namespace boe_se
 			private int[] movingAverageShortGraph () //Parameter: 1. Preis, 2. Menge //-2 keine Aussage (z.B. wegen zu wenig Werten); -1 Kurs fallend => (jetzt) Verkaufen, 0 nicht Handeln, 1 Kurs steigend => (jetzt) Kaufen
 			{//Graph vom kurzfristigen gleitenden Durhschnitt
 
-				var verkaufspreise = GetCompiledItemValues();
+				var verkaufspreise = compiledItemValues;
                 int shortma = 50;
                 if (verkaufspreise.Length < shortma)
                 {
@@ -300,7 +301,7 @@ namespace boe_se
 
 			private int[] movingAverageLongGraph () //Parameter: 1. Preis, 2. Menge //-2 keine Aussage (z.B. wegen zu wenig Werten); -1 Kurs fallend => (jetzt) Verkaufen, 0 nicht Handeln, 1 Kurs steigend => (jetzt) Kaufen
 			{//Graph vom langfristigen gleitenden Durhschnitt
-				var verkaufspreise = GetCompiledItemValues();
+				var verkaufspreise = compiledItemValues;
                 int longma = 200;
                 if (verkaufspreise.Length < longma)
                 {
@@ -321,7 +322,7 @@ namespace boe_se
 			private int movingAverage () //Parameter: 1. Preis, 2. Menge //-2 keine Aussage (z.B. wegen zu wenig Werten); -1 Kurs fallend => (jetzt) Verkaufen, 0 nicht Handeln, 1 Kurs steigend => (jetzt) Kaufen
 			{//Ergebnis des Analyseinstruments gleit. Durchschnitt
 				
-				var verkaufspreise = GetCompiledItemValues();
+				var verkaufspreise = compiledItemValues;
 
                 int longma = 200;
                 if (verkaufspreise.Length < longma)
@@ -365,7 +366,7 @@ namespace boe_se
 
 			private int[] expAverageGraph ()//Graph vom expotentiellen gleitenden Durhschnitt
 			{
-				var verkaufspreise = GetCompiledItemValues();
+				var verkaufspreise = compiledItemValues;
 				int[] expMA = new int[verkaufspreise.Length];
 				expMA [0] = (verkaufspreise [0]).Item1;
 				expMA [1] = expMA [0] + (2 / 3) * ((verkaufspreise [1]).Item1 - expMA [0]);
@@ -377,7 +378,7 @@ namespace boe_se
 
 			private int expAverage ()//Ergebnis des Analyseinstruments exp. gleit. Durchschnitt
 			{
-				var verkaufspreise = GetCompiledItemValues();
+				var verkaufspreise = compiledItemValues;
                 if (verkaufspreise.Length < 50)
                 {
                     return -2;
