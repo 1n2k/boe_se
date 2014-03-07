@@ -42,6 +42,11 @@ namespace boe_se
             }
         }
 
+        public class GItemIDConverter
+        {
+
+        }
+
         public partial class GItem
         {
             [JsonProperty("name")]
@@ -192,8 +197,15 @@ namespace boe_se
                         Debug.WriteLine("Getting Data for Item " + this.DataId + "\n");
                         this.Refresh();
                     }
-                    if (First == default(DateTime))
-                        First = sell ? SellList[0].Item1 : BuyList[0].Item1;
+                    try
+                    {
+                        if (First == default(DateTime))
+                            First = sell ? SellList[0].Item1 : BuyList[0].Item1;
+                    }
+                    catch (ArgumentOutOfRangeException)
+                    {
+                        return null;
+                    }
 
                     var list = sell ? SellList : BuyList;
                     DateTime nTime = time.AddMinutes(IntervalLength);

@@ -18,7 +18,7 @@ namespace boe_se
             watch.Start();
             foreach (GItem item in items)
             {
-                if (item.DataId == 787)
+                if (item.DataId == 56)
                 {
                     Console.WriteLine(item.kurs);
                 }
