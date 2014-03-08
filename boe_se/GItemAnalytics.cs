@@ -277,7 +277,7 @@ namespace boe_se
 				return false;
 			}
 
-			private int[] movingAverageShortGraph () //Parameter: 1. Preis, 2. Menge //-2 keine Aussage (z.B. wegen zu wenig Werten); -1 Kurs fallend => (jetzt) Verkaufen, 0 nicht Handeln, 1 Kurs steigend => (jetzt) Kaufen
+			public int[] movingAverageShortGraph () //Parameter: 1. Preis, 2. Menge //-2 keine Aussage (z.B. wegen zu wenig Werten); -1 Kurs fallend => (jetzt) Verkaufen, 0 nicht Handeln, 1 Kurs steigend => (jetzt) Kaufen
 			{//Graph vom kurzfristigen gleitenden Durhschnitt
 
 				var verkaufspreise = compiledItemValues;
@@ -299,7 +299,7 @@ namespace boe_se
 				return shortMA;
 			}
 
-			private int[] movingAverageLongGraph () //Parameter: 1. Preis, 2. Menge //-2 keine Aussage (z.B. wegen zu wenig Werten); -1 Kurs fallend => (jetzt) Verkaufen, 0 nicht Handeln, 1 Kurs steigend => (jetzt) Kaufen
+			public int[] movingAverageLongGraph () //Parameter: 1. Preis, 2. Menge //-2 keine Aussage (z.B. wegen zu wenig Werten); -1 Kurs fallend => (jetzt) Verkaufen, 0 nicht Handeln, 1 Kurs steigend => (jetzt) Kaufen
 			{//Graph vom langfristigen gleitenden Durhschnitt
 				var verkaufspreise = compiledItemValues;
                 int longma = 200;
@@ -364,7 +364,7 @@ namespace boe_se
 				return 0;
 			}
 
-			private int[] expAverageGraph ()//Graph vom expotentiellen gleitenden Durhschnitt
+			public int[] expAverageGraph ()//Graph vom expotentiellen gleitenden Durhschnitt
 			{
 				var verkaufspreise = compiledItemValues;
 				int[] expMA = new int[verkaufspreise.Length];
