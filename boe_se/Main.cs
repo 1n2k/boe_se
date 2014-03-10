@@ -18,22 +18,18 @@ namespace boe_se
             watch.Start();
             foreach (GItem item in items)
             {
-                if (item.DataId == 56)
+                if (item.DataId >= 15000 && item.DataId <=20000)
                 {
-                    Console.WriteLine(item.kurs);
+                    System.Diagnostics.Debug.WriteLine(item.kurs);
                 }
             }
             watch.Stop();
-            Console.WriteLine(watch.ElapsedMilliseconds + " ms mit Ausgabe");
-            Console.ReadLine();
-            watch.Start();
-            int a;
-            foreach (GItem item in items)
-            {
-                a = item.kurs;
-            }
-            watch.Stop();
-            Console.WriteLine(watch.ElapsedMilliseconds + " ms ohne Ausgabe");
+            Console.WriteLine(watch.ElapsedMilliseconds + " ms gesamt");
+            Console.WriteLine(GItem.ArrayBereitstellen + " ms für das Bereitstellen der Listen");
+            Console.WriteLine(GItem.exponentiellerDurchschnitt + " ms für das Berechnen der exponentiellen Durchschnitte");
+            Console.WriteLine(GItem.gleitenderDurchschnitt + " ms für das Berechnen der gleitenden Durchschnitte");
+            Console.WriteLine(GItem.FormationEinrichten + " ms für das Bereitstellen der speziellen Listen für die Formationen");
+            Console.WriteLine(GItem.Formationen + " ms für das Erkennen der Formationen");
 		}
 	}
 }
