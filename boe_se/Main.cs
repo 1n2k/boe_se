@@ -16,24 +16,12 @@ namespace boe_se
             Console.WriteLine("Die Daten wurden heruntergeladen.");
             System.Diagnostics.Stopwatch watch = new System.Diagnostics.Stopwatch();
             watch.Start();
-            foreach (GItem item in items)
-            {
-                if (item.DataId == 56)
-                {
-                    Console.WriteLine(item.kurs);
-                }
-            }
-            watch.Stop();
-            Console.WriteLine(watch.ElapsedMilliseconds + " ms mit Ausgabe");
-            Console.ReadLine();
-            watch.Start();
-            int a;
-            foreach (GItem item in items)
-            {
-                a = item.kurs;
-            }
+            GItem i = Market.GetInstance.GetItem(12355);
+            Console.WriteLine( i.Name + ": " + i.TypeToName().Item1 + ", " + i.TypeToName().Item2 );
+            Console.WriteLine(i.kurs);
             watch.Stop();
             Console.WriteLine(watch.ElapsedMilliseconds + " ms ohne Ausgabe");
+            Console.ReadLine();
 		}
 	}
 }

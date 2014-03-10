@@ -44,6 +44,11 @@ namespace boe_se
         
         public partial class GItem
         {
+            public GItem()
+            {
+                lastPage["sell"] = lastPage["buy"] = 1;
+            }
+
             [JsonProperty("name")]
             public string Name { get; private set; }
 
@@ -127,6 +132,8 @@ namespace boe_se
                 public List<GListing> Results;
             }
 
+            private Dictionary<string,int> lastPage =new Dictionary<string,int>();
+
             /// <summary>
             /// Get most recent sell and buy data.
             /// </summary>
@@ -142,20 +149,23 @@ namespace boe_se
                 mode = "buy";
                 list = BuyList;
             NEXT:
-                GListingsResult g = JsonConvert.DeserializeObject<GListingsResult>(wc.DownloadString("http://www.gw2spidy.com/api/v0.9/json/listings/" + this.DataId + "/" + mode + "/1"));
+                GListingsResult g = JsonConvert.DeserializeObject<GListingsResult>(wc.DownloadString("http://www.gw2spidy.com/api/v0.9/json/listings/" + this.DataId + "/" + mode + "/" + lastPage[mode]));
 
                 list = new List<Tuple<DateTime, int, int>>();
 
                 foreach (var item in g.Results)
-                    list.Add(item);
+                    if (!list.Contains(item))
+                        list.Add(item);
 
                 while (g.Page < g.LastPage)
                 {
                     g = JsonConvert.DeserializeObject<GListingsResult>(wc.DownloadString("http://www.gw2spidy.com/api/v0.9/json/listings/" + this.DataId + "/"+ mode + "/" + (++g.Page)));
 
                     foreach (var item in g.Results)
-                        list.Add(item);
+                            list.Add(item);
                 }
+
+                lastPage[mode] = g.Page;
 
                 if (mode == "sell")
                 {
@@ -163,7 +173,9 @@ namespace boe_se
                     goto BUY;
                 }
                 else
+                {
                     BuyList = list;
+                }
                 BuyList.Sort();
                 SellList.Sort();
             }

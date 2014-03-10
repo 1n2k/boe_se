@@ -39,9 +39,11 @@ namespace boe_se
 
             public static Tuple<string,string> TypeToName(this GItem item)
             {
+                if (item == null)
+                    return new Tuple<string, string>("YOU", "IDIOT");
                 if(AllItems == null)
                     AllItems = JsonConvert.DeserializeObject<GAllType>(new WebClient().DownloadString("http://www.gw2spidy.com/api/v0.9/json/types")).Results;
-                return new Tuple<string, string>(AllItems[item.TypeId].Name, AllItems[item.TypeId].Subtypes[item.SubTypeId].Name);
+                return new Tuple<string, string>(AllItems[item.TypeId-1].Name, AllItems[item.TypeId-1].Subtypes[item.SubTypeId-1].Name);
             }
         }
     }
