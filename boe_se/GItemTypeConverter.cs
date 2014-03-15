@@ -45,6 +45,11 @@ namespace boe_se
                     AllItems = JsonConvert.DeserializeObject<GAllType>(new WebClient().DownloadString("http://www.gw2spidy.com/api/v0.9/json/types")).Results;
                 return new Tuple<string, string>(AllItems[item.TypeId-1].Name, AllItems[item.TypeId-1].Subtypes[item.SubTypeId-1].Name);
             }
+            public static void forceInit()
+            {
+                if(AllItems == null)
+                    AllItems = JsonConvert.DeserializeObject<GAllType>(new WebClient().DownloadString("http://www.gw2spidy.com/api/v0.9/json/types")).Results;
+            }
         }
     }
 }
