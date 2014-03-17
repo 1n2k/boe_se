@@ -23,7 +23,7 @@ namespace boe_se
                     watch.Start();
                     compiledItemValues = GetCompiledItemValues();
                     watch.Stop();
-                    Console.WriteLine(watch.ElapsedMilliseconds + " ms f�r das Bereitstellen des Arrays");
+                    Console.WriteLine(watch.ElapsedMilliseconds + " ms fuer das Bereitstellen des Arrays");
                     ArrayBereitstellen += watch.ElapsedMilliseconds;
                     if (compiledItemValues.Length <= 50)
                     {
@@ -56,13 +56,13 @@ namespace boe_se
                 watch.Start();
 				int a = movingAverage ();
                 watch.Stop();
-                Console.WriteLine(watch.ElapsedMilliseconds + " ms f�r den gleitenden Durchschnitt");
+                Console.WriteLine(watch.ElapsedMilliseconds + " ms fuer den gleitenden Durchschnitt");
                 gleitenderDurchschnitt += watch.ElapsedMilliseconds;
                 watch = new System.Diagnostics.Stopwatch();
                 watch.Start();
 				int b = expAverage ();
                 watch.Stop();
-                Console.WriteLine(watch.ElapsedMilliseconds + " ms f�r den exponentiellen Durchschnitt");
+                Console.WriteLine(watch.ElapsedMilliseconds + " ms fuer den exponentiellen Durchschnitt");
                 exponentiellerDurchschnitt += watch.ElapsedMilliseconds;
 				if (a == -2 || a == 0) {
 					return b;
@@ -108,7 +108,7 @@ namespace boe_se
 					return -2;
 				}
                 watch.Stop();
-                Console.WriteLine(watch.ElapsedMilliseconds + " ms zum Einrichten der Werte f�r die Formationen");
+                Console.WriteLine(watch.ElapsedMilliseconds + " ms zum Einrichten der Werte fuer die Formationen");
                 FormationEinrichten += watch.ElapsedMilliseconds;
                 watch = new System.Diagnostics.Stopwatch();
                 watch.Start();
@@ -455,7 +455,7 @@ namespace boe_se
                     watch.Start();
                     compiledItemValues = GetCompiledItemValues();
                     watch.Stop();
-                    Console.WriteLine(watch.ElapsedMilliseconds + " ms f�r das Bereitstellen des Arrays");
+                    Console.WriteLine(watch.ElapsedMilliseconds + " ms fuer das Bereitstellen des Arrays");
                     ArrayBereitstellen += watch.ElapsedMilliseconds;
                     if (compiledItemValues.Count <= 50)
                     {
@@ -521,7 +521,9 @@ namespace boe_se
                 int idx = 0;
                 Tuple<int, int> ac = this[idx++, sell];
                 while (ac != null)
-                {
+                {	
+		    if(ac.Item1 == 0 && ac.Item2 == 0 && ret.Count > 0)
+			ac = new Tuple<int,int>(ret[ret.Count - 1].Item1,0);
                     ret.Add(ac);
                     ac = this[idx++, sell];
                 }
