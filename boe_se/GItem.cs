@@ -223,8 +223,7 @@ namespace boe_se
                     int i = list.FindIndex((Tuple<DateTime, int, int> a) =>
                         a.Item1.CompareTo(time) >= 0 && a.Item1.CompareTo(nTime) <= 0);
 
-					if(i < 0)
-						return new Tuple<int,int>(0,0);
+                    if(i < 0) return null;
 
                     if (i >= list.Count)
                         return null;
